@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authorizationHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
 
-        // Check if the user is not already authenticated
+        // If the SecurityContext does not have an authentication object, create one i.e if the user is not authenticated yet
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
@@ -58,5 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         }
+
+        filterChain.doFilter(request,response);
     }
 }

@@ -6,10 +6,7 @@ import com.example.skill2ruralserver.response.AuthenticationResponse;
 import com.example.skill2ruralserver.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,5 +18,10 @@ public class AuthenticationController {
     @PostMapping("/login/student")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginUserDto request){
         return ResponseEntity.ok(service.login(request));
+    }
+
+    @GetMapping("/")
+    public  String sayHello(){
+        return "Hello world from skill2rural auth";
     }
 }
